@@ -52,3 +52,20 @@ h2 {
    font-weight: normal;
    color: #fff;
 }
+
+.wrapper1 {
+  padding: 180px 0 100px 0;
+  text-align: center;
+}
+
+.wrapper1 h3 {
+  opacity: 0.7;
+  font-size: 45px;
+  letter-spacing: 5px;
+}
+
+.wrapper1 p {
+  opacity: 0.7;
+  font-size: 16px;
+  margin-bottom: 40px;
+}
