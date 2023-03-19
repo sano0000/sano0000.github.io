@@ -1,6 +1,7 @@
 @media screen and (max-width:480px){ 
 .page{
     height: 100vh;
+    align-items: center;
   }
 }
 
@@ -78,7 +79,7 @@ h4{
     margin: 5vh auto 10vh;
 }
 
-.btn a {
+.btn {
     background: #eee;
     border-radius: 3px;
     position: relative;
@@ -92,11 +93,11 @@ h4{
     transition: 0.3s ease-in-out;
     font-weight: 500;
 }
-.btn a:hover {
+.btn:hover {
     background: #313131;
     color: #FFF;
 }
-.btn a:after {
+.btn:after {
     content: '';
     width: 5px;
     height: 5px;
@@ -109,6 +110,6 @@ h4{
     border-radius: 1px;
     transition: 0.3s ease-in-out;
 }
-.btn a:hover:after {
+.btn:hover:after {
     border-color: #FFF;
 }
