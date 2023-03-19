@@ -59,6 +59,11 @@ h3{
    color:#887BB0
 }
 
+h4{
+   font-family: 'Hachi Maru Pop', cursive;
+   color:#343a40
+}
+
 .page {
     position: relative;
     width: 55%;
