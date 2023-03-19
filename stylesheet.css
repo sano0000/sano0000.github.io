@@ -79,21 +79,37 @@ h4{
     margin: 5vh auto 10vh;
 }
 
-.btn, .btn:link, .btn:visited {
-  padding: 13px 0;
-  border: 1px solid #333;
-  color: #333;
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 13px;
-  letter-spacing: 3px;
-  transition: all .2s ease-in-out;
-  
-  &:hover {
-    background: #333;
-    border: 1px solid #333;
-    color: #fefefe;
-    border-radius: 30px;
-  }
+.btn a {
+    background: #eee;
+    border-radius: 3px;
+    position: relative;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    margin: 0 auto;
+    max-width: 280px;
+    padding: 10px 25px;
+    color: #313131;
+    transition: 0.3s ease-in-out;
+    font-weight: 500;
 }
-
+.btn a:hover {
+    background: #313131;
+    color: #FFF;
+}
+.btn a:after {
+    content: '';
+    width: 5px;
+    height: 5px;
+    border-top: 3px solid #313131;
+    border-right: 3px solid #313131;
+    transform: rotate(45deg) translateY(-50%);
+    position: absolute;
+    top: 50%;
+    right: 20px;
+    border-radius: 1px;
+    transition: 0.3s ease-in-out;
+}
+.btn a:hover:after {
+    border-color: #FFF;
+}
