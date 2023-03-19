@@ -52,3 +52,12 @@ h2 {
    font-weight: normal;
    color: #fff;
 }
+
+.page {
+    position: relative;
+    width: 55%;
+    min-width: 700px;
+    max-width: 1000px;
+    padding: 0 5vh;
+    margin: 5vh auto 10vh;
+}
