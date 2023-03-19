@@ -1,11 +1,3 @@
-@media screen and (max-width:480px){ 
-.ul{
-    width:100%;
-  }
-.start
-    max-width: 100%;
-}
-
 * {
    box-sizing: border-box;
 }
