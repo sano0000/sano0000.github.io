@@ -8,6 +8,14 @@
    }
 }
 
+#ham {
+   position: relative;
+   display: block;
+   width: 30px;
+   height: 25px;
+   margin: 0 0 0 auto;
+}
+
 body {
    margin: 0;
    padding: 0;
