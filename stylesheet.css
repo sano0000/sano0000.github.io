@@ -80,10 +80,6 @@ h4{
     margin: 5vh auto 10vh;
 }
 
-span {
-   display: inline-block;
-}
-
 .btn {
     background: #eee;
     border-radius: 3px;
