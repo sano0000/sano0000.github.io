@@ -64,6 +64,10 @@ h4{
    font-size: 25px;
 }
 
+img {
+   width: 100px;
+}
+
 .page {
     position: relative;
     width: 55%;
