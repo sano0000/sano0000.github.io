@@ -115,3 +115,36 @@ img {
 .btn:hover:after {
     border-color: #FFF;
 }
+
+  @media screen and (max-width: 768px) {
+    .page {
+      width: 90%;
+      min-width: auto;
+      padding: 0;
+    }
+  
+    .start {
+      height: 80vh;
+    }
+  
+    h2 {
+      font-size: 24px;
+    }
+  
+    h3 {
+      font-size: 28px;
+    }
+  
+    h4 {
+      font-size: 28px;
+    }
+  
+    .aaa {
+      margin: 3vh auto 8vh;
+    }
+  
+    img {
+      width: 100%;
+    }
+  }
+  
