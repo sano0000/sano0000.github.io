@@ -107,7 +107,6 @@
     transform: rotate(45deg) translateY(-50%);
     position: absolute;
     top: 50%;
-    right: 20px;
     border-radius: 1px;
     transition: 0.3s ease-in-out;
 }
