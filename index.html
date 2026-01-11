@@ -73,7 +73,7 @@
     .slideshow{
       position:relative;
       border-radius:12px;
-      overflow:visible; /* ラッパー自体は visible にして UI 要素を固定できるようにする */
+      overflow:visible; 
       background:#f9f7fb;
       width:100%;
       max-width:100%;
@@ -81,7 +81,6 @@
       padding:0;
     }
 
-    /* 内側のスクロール可能領域 */
     .slides{
       display:flex;
       gap:0;
@@ -214,7 +213,7 @@
       .slides{scroll-behavior:auto}
     }
 
-    /* optional: スクロールバー見た目調整（邪魔なら非表示にする） */
+    /* optional: スクロールバー見た目調整 */
     .slides::-webkit-scrollbar{height:8px}
     .slides::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.08);border-radius:999px}
   </style>
@@ -328,8 +327,8 @@
         </article>
 
         <article class="item" data-category="other">
-          <div class="thumb"><img loading="lazy" src="kame_kuro.png.png" alt="turtlePikoのロゴ"></div>
-          <div class="meta"><h5>turtlePikoロゴ</h5><p>@Jin_Neuron_DevのturtlePicoのロゴ/p></div>
+          <div class="thumb"><img loading="lazy" src="kame_kuro.png" alt="turtlePikoのロゴ"></div>
+          <div class="meta"><h5>turtlePikoロゴ</h5><p>@Jin_Neuron_DevのturtlePicoのロゴ</p></div>
         </article>
 
       </div>
