@@ -78,12 +78,19 @@
 
     /* 内側のスクロール可能領域 */
     .slides{
-  height:100%;
-  padding-bottom:20px;       /* ← 微調整 */
-}
+      display:flex;
+      gap:0;
+      height:100%;
+      width:100%;
+      overflow-x:auto;                
+      overflow-y:hidden;
+      scroll-snap-type: x mandatory;  
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
+    }
 
     .slide{
-      flex:0 0 100%;                  /* 各スライドはラッパー幅いっぱい */
+      flex:0 0 100%;                
       scroll-snap-align:center;
       display:flex;
       justify-content:center;
@@ -91,13 +98,22 @@
       height:100%;
       position:relative;
       box-sizing:border-box;
-      padding:0 12px; /* 画像がエッジに張り付かないように内側余白 */
+      padding:0 12px; 
     }
 
     .slide img{
-  max-height:calc(100% - 40px); /* 矢印 + ドットを避ける */
-  object-fit:contain;
-}
+      display:block;
+      margin:0 auto;
+      max-width:100%;
+      max-height:100%;
+      width:auto;
+      height:auto;
+      object-fit:contain;
+      border-radius:6px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.06);
+      background:#fff;
+    }
+
 
     /* UI（矢印/ドット）をラッパー上に固定 */
     .slidenav{
