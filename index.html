@@ -1,141 +1,295 @@
-<!DOCTYPE html>
-<html>
+<!doctype html>
+<html lang="ja">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="stylesheet" type="text/css" href="stylesheet.css">
-  <link rel="icon" href="F89F05D3-24F0-4618-9C55-CB838866E8CD.png" >
-  <link rel="apple-touch-icon" sizes="180x180" href="E41F4213-5F8F-4105-90FF-32E5F6E0C43B.jpeg">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>sano0000 — redesign</title>
+  <link rel="icon" href="F89F05D3-24F0-4618-9C55-CB838866E8CD.png">
   <link href="https://fonts.googleapis.com/css2?family=Hachi+Maru+Pop&display=swap" rel="stylesheet">
-  <title>sano0000</title>
+  <style>
+    :root{
+      --bg: #f3f2f7;
+      --card: #ffffff;
+      --accent: #887BB0;
+      --muted: #6b6b6b;
+      --radius: 14px;
+      --max-width: 1040px;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%;margin:0;font-family: "Hiragino Kaku Gothic Pro", Meiryo, Arial, sans-serif;background:var(--bg);color:#222}
+    header{background:linear-gradient(180deg, rgba(255,255,255,0.9), rgba(255,255,255,0.8));backdrop-filter: blur(4px);position:sticky;top:0;z-index:50;display:flex;align-items:center;padding:18px 4%;box-shadow:0 4px 18px rgba(20,20,20,0.05)}
+    header h1{margin:0;font-size:20px}
+    nav{margin-left:auto}
+    nav ul{display:flex;gap:14px;margin:0;padding:0;list-style:none}
+    nav a{color:#5f5aa2;text-decoration:none;padding:8px 12px;border-radius:8px}
+    nav a:hover{background:rgba(136,123,176,0.08);color:var(--accent)}
+
+    .container{max-width:var(--max-width);margin:48px auto;padding:0 20px}
+
+    /* HERO / SLIDESHOW */
+    .hero{border-radius:var(--radius);overflow:hidden;display:grid;grid-template-columns:1fr 360px;gap:28px;align-items:center;background:linear-gradient(135deg,#fff,#faf8ff);padding:28px;box-shadow:0 10px 30px rgba(50,40,80,0.06)}
+    .hero-left{padding:10px}
+    .hero h2{font-family:'Hachi Maru Pop',cursive;color:var(--accent);margin:6px 0 6px;font-size:40px}
+    .hero p{color:var(--muted);margin:0 0 12px}
+
+    .slideshow{position:relative;border-radius:12px;overflow:hidden;background:#ddd}
+    .slides{display:flex;transition:transform .6s cubic-bezier(.22,.9,.2,1)}
+    .slide{min-width:100%;display:block}
+    .slide img{display:block;width:100%;height:320px;object-fit:cover}
+    .slide-meta{position:absolute;left:16px;bottom:16px;background:rgba(0,0,0,0.45);color:#fff;padding:8px 12px;border-radius:10px;font-size:14px}
+    .slidenav{position:absolute;top:50%;transform:translateY(-50%);width:100%;display:flex;justify-content:space-between;padding:0 10px}
+    .slidenav button{background:rgba(255,255,255,0.85);border:0;padding:10px;border-radius:10px;cursor:pointer}
+    .dots{display:flex;gap:8px;justify-content:center;padding:12px}
+    .dot{width:10px;height:10px;border-radius:50%;background:rgba(0,0,0,0.18);border:none;cursor:pointer}
+    .dot.active{background:var(--accent)}
+
+    /* HERO RIGHT CARD */
+    .hero-right{display:flex;flex-direction:column;gap:12px}
+    .card{background:var(--card);padding:16px;border-radius:12px;box-shadow:0 6px 20px rgba(50,40,80,0.05)}
+    .card small{color:var(--muted)}
+
+    /* PORTFOLIO */
+    .section-title{font-family:'Hachi Maru Pop',cursive;color:var(--accent);font-size:32px;margin:36px 0 6px}
+    .portfolio-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px;margin-top:18px}
+    .item{background:var(--card);border-radius:12px;padding:12px;display:flex;gap:12px;align-items:center;box-shadow:0 8px 30px rgba(20,20,40,0.04)}
+    .thumb{width:140px;height:110px;border-radius:8px;overflow:hidden;flex-shrink:0}
+    .thumb img{width:100%;height:100%;object-fit:cover;display:block}
+    .meta p{margin:0;color:var(--muted)}
+    .meta h5{margin:0 0 6px;font-size:16px}
+    .filter-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px}
+    .chip{background:transparent;border:1px solid rgba(136,123,176,0.18);padding:6px 10px;border-radius:999px;cursor:pointer}
+    .chip.active{background:var(--accent);color:#fff;border-color:var(--accent)}
+
+    /* LIGHTBOX */
+    .lightbox{position:fixed;inset:0;background:rgba(0,0,0,0.7);display:flex;align-items:center;justify-content:center;z-index:200;opacity:0;pointer-events:none;transition:opacity .2s}
+    .lightbox.open{opacity:1;pointer-events:auto}
+    .lightbox img{max-width:92%;max-height:82%;border-radius:12px;box-shadow:0 20px 60px rgba(0,0,0,0.6)}
+    .lb-caption{color:#fff;margin-top:12px;text-align:center}
+    .lb-close{position:absolute;right:18px;top:18px;background:transparent;border:0;color:#fff;font-size:28px;cursor:pointer}
+
+    /* Responsive */
+    @media (max-width:980px){
+      .hero{grid-template-columns:1fr;}
+      .slides img{height:220px}
+      .portfolio-grid{grid-template-columns:repeat(2,1fr)}
+      .thumb{width:120px;height:88px}
+    }
+    @media (max-width:600px){
+      .portfolio-grid{grid-template-columns:1fr}
+      nav ul{gap:8px}
+      .hero h2{font-size:30px}
+      .slides img{height:160px}
+    }
+
+    /* accessible reduced motion */
+    @media (prefers-reduced-motion: reduce){
+      .slides{transition:none}
+    }
+  </style>
 </head>
 <body>
-<header>
-  <h1>
-    <a href="/">sano</a>
-  </h1>
-  <nav class="menu">
-    <ul>
-      <li><a href="#ab">ABOUT</a></li>
-      <li><a href="#po">PORTFOLIO</a></li>
-      <li><a href="#LI">LINKS</a></li>
-    </ul>
-  </nav>
-</header>
-    
-<div class="start">
-   <h2>Hi!</h2>
-</div>
-<main class="page">
-    <section>
-      <h3 id="ab">ABOUT</h3>
-      <p>初めまして！佐野です！</p>
-      <p>制作物などぼちぼち載せていこうと思います。</p>
-      <h4>introduce</h4>
-      <p>高専の情報工学科2年です。<br>軽音部と電研(電気技術研究会)に所属しています。<br>電研では一応副部長をやらせてもらってます。</p>
-      <p>ポスターやイラストの制作が趣味です。<br>需要があればTwitterのDMまでお気軽にご連絡ください。</p>
+  <header>
+    <h1><a href="/">sano</a></h1>
+    <nav>
+      <ul>
+        <li><a href="#ab">ABOUT</a></li>
+        <li><a href="#po">PORTFOLIO</a></li>
+        <li><a href="#LI">LINKS</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main class="container">
+    <!-- HERO with slideshow -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-left">
+        <h2 id="hero-heading">Hi! 佐野です</h2>
+        <p>ポスターやイラストを中心に制作しています。ここに最近の作品をスライドショーで表示しています。</p>
+
+        <div class="slideshow card" id="slideshow" aria-roledescription="carousel">
+          <div class="slides" id="slides">
+            <figure class="slide"><img src="E7735BF7-A0F1-4845-BBEA-BCC3AF916165.jpeg" alt="header full view"><figcaption class="slide-meta">ヘッダーの全容</figcaption></figure>
+            <figure class="slide"><img src="107AAAF1-5FBC-4129-B3E6-EF54A72EA91E.png" alt="poster 1"><figcaption class="slide-meta">令和4年 高専祭ポスター</figcaption></figure>
+            <figure class="slide"><img src="3B30E03E-020A-422B-8401-8A2102570DEC.png" alt="poster 2"><figcaption class="slide-meta">新入生募集ポスター</figcaption></figure>
+          </div>
+          <div class="slidenav">
+            <button id="prev" aria-label="前へ">◀</button>
+            <button id="next" aria-label="次へ">▶</button>
+          </div>
+          <div class="dots" id="dots" aria-hidden="false"></div>
+        </div>
+      </div>
+
+      <aside class="hero-right">
+        <div class="card">
+          <small>INTRODUCE</small>
+          <h3 style="margin:6px 0 10px;font-size:20px;font-family:'Hachi Maru Pop',cursive;color:var(--accent)">高専 情報工学科2年</h3>
+          <p style="margin:0;color:var(--muted)">軽音部と電研に所属。ポスターやアイコン制作が得意です。仕事のご相談はTwitterのDMへ。</p>
+        </div>
+        <div class="card">
+          <small>CONTACT</small>
+          <p style="margin:6px 0 0"><a class="btn" href="https://twitter.com/Jin_Neuron" target="_blank">@Jin_Neuron</a></p>
+        </div>
+      </aside>
     </section>
-    <section>
-      <h3 id="po">PORTFOLIO</h3>
-      <p>私が描いたイラストやポスターの作品集です。<br>随時更新していきます。</p>
-      <h4>snsアイコン</h4>
-      <div class="aaa">
-        <div class="iii">
-          <img src="E76929EB-6061-4156-9368-2AE55BFA4AB7.jpeg" alt="アイコン1">
-        </div>
-        <div class="ttt">
-          <p>私のTwitterアイコンです</p>
-        </div>
+
+    <!-- ABOUT -->
+    <section style="margin-top:36px;">
+      <h2 class="section-title" id="ab">ABOUT</h2>
+      <p>初めまして！佐野です。制作物など随時更新中。</p>
+    </section>
+
+    <!-- PORTFOLIO -->
+    <section style="margin-top:18px;">
+      <h2 class="section-title" id="po">PORTFOLIO</h2>
+      <p>イラストやポスターのギャラリー。クリックで拡大できます。</p>
+
+      <div class="filter-row" role="tablist" aria-label="フィルター">
+        <button class="chip active" data-filter="all">All</button>
+        <button class="chip" data-filter="icon">SNSアイコン</button>
+        <button class="chip" data-filter="poster">ポスター</button>
+        <button class="chip" data-filter="other">その他</button>
       </div>
-      <div class="aaa">
-        <div class="iii">
-          <img src="2555B4B0-2A2F-4604-8D0F-F34C7BA87B2A.jpeg" alt="アイコン2">
-        </div>
-        <div class="ttt">
-          <a href="https://twitter.com/Jin_Neuron"target="_blank">@Jin_Neuron</a>
-          <p>色んな所で使っていただいてます！<br>嬉しいです</p>
-        </div>
-      </div>
-      <div class="aaa">
-        <div class="iii">
-          <img src="1DD45616-8A12-4BA1-AF0D-E2D808776FDA.png" alt="アイコン3">
-        </div>
-        <div class="ttt">
-          <p>@Basyo_Engineer</p>
-        </div>
-      </div>
-      <h4>電気技術研究会</h4>
-      <div class="aaa">
-        <div class="iii">
-          <img src="107AAAF1-5FBC-4129-B3E6-EF54A72EA91E.png" alt="ポスター1">
-        </div>
-        <div class="ttt">
-          <p>令和4年の高専祭のポスター</p>
-        </div>
-      </div>
-      <div class="aaa">
-        <div class="iii">
-          <img src="661F5FF8-B3FC-417A-93AF-5C312DE4F444.png" alt="ポスター2">
-        </div>
-        <div class="ttt">
-          <p><a href="https://sites.google.com/view/denki-katen/" target="_blank">令和4年の高専祭HP</a>のファビコン</p>
-        </div>
-      </div>
-      <div class="aaa">
-        <div class="iii">
-          <img src="3B30E03E-020A-422B-8401-8A2102570DEC.png" alt="ポスター3">
-        </div>
-        <div class="ttt">
-          <p>令和5年度の新入生募集用ポスター<br>あ、部員募集してます！</p>
-        </div>
-      </div>
-      <h4>その他</h4>
-      <div class="aaa">
-        <div class="iii">
-          <img src="7586ECBA-0574-4C28-97ED-F2773C5B384C.png" alt="アイコン4">
-        </div>
-        <div class="ttt">
-          <p>jinの秘書botのアイコン</p>
-        </div>
-      </div>
-      <div class="aaa">
-        <div class="iii">
-          <img src="E7735BF7-A0F1-4845-BBEA-BCC3AF916165.jpeg" alt="ヘッダーの全容">
-        </div>
-        <div class="ttt">
-          <p>ヘッダーの全容はこんな感じです</p>
-        </div>
-      </div>
-      
-      <div class="aaa">
-        <div class="iii">
-          <img src="5.png" alt="名刺デザイン1">
-          <img src="6.png" alt="名刺デザイン2">
-        </div>
-       <div class="iii">
-         <img src="7.png" alt="名刺デザイン3">
-         <img src="8.png" alt="名刺デザイン4">
-       </div>
-        <div class="ttt">
-          <p><a href="https://twitter.com/Jin_Neuron"target="_blank">@Jin_Neuron</a>さんの名刺デザインです</p>
-        </div>
+
+      <div class="portfolio-grid" id="gallery">
+        <!-- Reuse the same filenames you had; captions come from the markup -->
+        <article class="item" data-category="icon">
+          <div class="thumb"><img loading="lazy" src="E76929EB-6061-4156-9368-2AE55BFA4AB7.jpeg" alt="アイコン1"></div>
+          <div class="meta"><h5>SNSアイコン</h5><p>私のTwitterアイコンです</p></div>
+        </article>
+
+        <article class="item" data-category="icon">
+          <div class="thumb"><img loading="lazy" src="2555B4B0-2A2F-4604-8D0F-F34C7BA87B2A.jpeg" alt="アイコン2"></div>
+          <div class="meta"><h5>@Jin_Neuron</h5><p>色んな所で使っていただいてます！</p></div>
+        </article>
+
+        <article class="item" data-category="icon">
+          <div class="thumb"><img loading="lazy" src="1DD45616-8A12-4BA1-AF0D-E2D808776FDA.png" alt="アイコン3"></div>
+          <div class="meta"><h5>@Basyo_Engineer</h5><p>用途色々</p></div>
+        </article>
+
+        <article class="item" data-category="poster">
+          <div class="thumb"><img loading="lazy" src="107AAAF1-5FBC-4129-B3E6-EF54A72EA91E.png" alt="ポスター1"></div>
+          <div class="meta"><h5>高専祭ポスター (R4)</h5><p>令和4年の高専祭ポスター</p></div>
+        </article>
+
+        <article class="item" data-category="poster">
+          <div class="thumb"><img loading="lazy" src="661F5FF8-B3FC-417A-93AF-5C312DE4F444.png" alt="ポスター2"></div>
+          <div class="meta"><h5>サイト用ファビコン</h5><p>高専祭HPのファビコン</p></div>
+        </article>
+
+        <article class="item" data-category="poster">
+          <div class="thumb"><img loading="lazy" src="3B30E03E-020A-422B-8401-8A2102570DEC.png" alt="ポスター3"></div>
+          <div class="meta"><h5>入部募集ポスター</h5><p>令和5年度の新入生募集用ポスター</p></div>
+        </article>
+
+        <article class="item" data-category="other">
+          <div class="thumb"><img loading="lazy" src="7586ECBA-0574-4C28-97ED-F2773C5B384C.png" alt="jinの秘書bot"></div>
+          <div class="meta"><h5>秘書bot アイコン</h5><p>jinの秘書botのアイコン</p></div>
+        </article>
+
+        <article class="item" data-category="other">
+          <div class="thumb"><img loading="lazy" src="5.png" alt="名刺1"></div>
+          <div class="meta"><h5>名刺デザイン</h5><p>複数の名刺案</p></div>
+        </article>
+
       </div>
     </section>
-    <section>
-      <h3 id="LI">LINKS</h3>
+
+    <!-- LINKS -->
+    <section style="margin-top:28px;">
+      <h2 class="section-title" id="LI">LINKS</h2>
       <p>連絡はTwitterのDMまでお願いします。</p>
-      <h4>Twitter</h4>
-      <p>↓高専垢↓</p>
-      <a class="btn" href="https://twitter.com/ABCDEFijij"target="_blank">@_Uzu3</a>
-      <h4>Github</h4>
-      <a class="btn" href="https://github.com/sano0000"target="_blank">sano0000</a>
+
+      <div class="card" style="margin-top:12px;">
+        <h4 style="margin:0 0 6px;font-family:'Hachi Maru Pop',cursive;color:var(--accent)">Twitter（高専垢）</h4>
+        <a class="link-item" href="https://twitter.com/ABCDEFijij" target="_blank">@_Uzu3</a>
+      </div>
+
+      <div class="card" style="margin-top:12px;">
+        <h4 style="margin:0 0 6px;font-family:'Hachi Maru Pop',cursive;color:var(--accent)">Github</h4>
+        <a class="link-item" href="https://github.com/sano0000" target="_blank">sano0000</a>
+      </div>
     </section>
-    <section>
-      <h3 id="ot">OTHERS</h3>
-      <p>準備中です。まだまだ制作途中ですみません！！！</p>
-    </section>
+
   </main>
+
+  <!-- LIGHTBOX -->
+  <div id="lightbox" class="lightbox" role="dialog" aria-hidden="true">
+    <button class="lb-close" id="lbClose" aria-label="閉じる">✕</button>
+    <div>
+      <img id="lbImg" src="" alt="">
+      <div class="lb-caption" id="lbCaption"></div>
+    </div>
+  </div>
+
+  <script>
+    // Simple slideshow
+    (function(){
+      const slidesEl = document.getElementById('slides');
+      const slides = Array.from(slidesEl.children);
+      const dotsEl = document.getElementById('dots');
+      const prev = document.getElementById('prev');
+      const next = document.getElementById('next');
+      let idx = 0;
+      let timer = null;
+      function buildDots(){
+        slides.forEach((s,i)=>{
+          const d = document.createElement('button'); d.className='dot'; d.addEventListener('click',()=>go(i)); dotsEl.appendChild(d);
+        });
+      }
+      function update(){
+        slidesEl.style.transform = `translateX(-${idx*100}%)`;
+        Array.from(dotsEl.children).forEach((d,i)=>d.classList.toggle('active', i===idx));
+      }
+      function go(i){ idx = (i+slides.length)%slides.length; update(); resetTimer(); }
+      function prevFn(){ go(idx-1); }
+      function nextFn(){ go(idx+1); }
+      function resetTimer(){ if(timer) clearInterval(timer); timer = setInterval(()=>{ idx=(idx+1)%slides.length; update(); }, 4500); }
+      buildDots(); update(); prev.addEventListener('click',prevFn); next.addEventListener('click',nextFn); resetTimer();
+      // pause on hover
+      const slideshow = document.getElementById('slideshow');
+      slideshow.addEventListener('mouseenter',()=>{ if(timer) clearInterval(timer); });
+      slideshow.addEventListener('mouseleave',resetTimer);
+    })();
+
+    // Gallery & lightbox
+    (function(){
+      const gallery = document.getElementById('gallery');
+      const items = Array.from(gallery.querySelectorAll('.item'));
+      const lightbox = document.getElementById('lightbox');
+      const lbImg = document.getElementById('lbImg');
+      const lbCaption = document.getElementById('lbCaption');
+      const lbClose = document.getElementById('lbClose');
+
+      items.forEach(it=>{
+        it.addEventListener('click',()=>{
+          const img = it.querySelector('img');
+          lbImg.src = img.src;
+          lbImg.alt = img.alt || '';
+          lbCaption.textContent = it.querySelector('.meta h5')?.textContent || img.alt || '';
+          lightbox.classList.add('open');
+          lightbox.setAttribute('aria-hidden','false');
+        });
+      });
+      lbClose.addEventListener('click',()=>{ lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden','true'); });
+      lightbox.addEventListener('click',(e)=>{ if(e.target===lightbox) { lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden','true'); }});
+      window.addEventListener('keydown',(e)=>{ if(e.key==='Escape') { lightbox.classList.remove('open'); lightbox.setAttribute('aria-hidden','true'); }});
+
+      // filters
+      const chips = document.querySelectorAll('.chip');
+      chips.forEach(ch=>{
+        ch.addEventListener('click',()=>{
+          chips.forEach(c=>c.classList.remove('active'));
+          ch.classList.add('active');
+          const f = ch.dataset.filter;
+          items.forEach(it=>{
+            if(f==='all') it.style.display='flex';
+            else it.style.display = it.dataset.category === f ? 'flex' : 'none';
+          });
+        });
+      });
+    })();
+  </script>
 </body>
 </html>
