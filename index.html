@@ -64,37 +64,26 @@
     .hero-left{padding:10px}
     .hero h2{font-family:'Hachi Maru Pop',cursive;color:var(--accent);margin:6px 0 12px;font-size:40px}
     .hero p{color:var(--muted);margin:0 0 18px}
-
-    /*
-      重要な構造：
-      - .slideshow はラッパー（UIを固定する）
-      - .slides (内側) がスクロール可能（scroll-snap をここに設定）
-    */
+    
     .slideshow{
-      position:relative;
-      border-radius:12px;
-      overflow:visible; 
-      background:#f9f7fb;
-      width:100%;
-      max-width:100%;
-      height:360px;
-      padding:0;
-    }
+  position:relative;
+  border-radius:12px;
+  background:#f9f7fb;
+  width:100%;
+  max-width:100%;
+  height:380px;              /* ← 360 → 380 に余裕 */
+  padding-bottom:28px;       /* ← dot のスペース確保 */
+  overflow:hidden;           /* ← 見切れ防止 */
+}
 
+    /* 内側のスクロール可能領域 */
     .slides{
-      display:flex;
-      gap:0;
-      height:100%;
-      width:100%;
-      overflow-x:auto;                
-      overflow-y:hidden;
-      scroll-snap-type: x mandatory;  
-      -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
-    }
+  height:100%;
+  padding-bottom:20px;       /* ← 微調整 */
+}
 
     .slide{
-      flex:0 0 100%;                  
+      flex:0 0 100%;                  /* 各スライドはラッパー幅いっぱい */
       scroll-snap-align:center;
       display:flex;
       justify-content:center;
@@ -102,21 +91,13 @@
       height:100%;
       position:relative;
       box-sizing:border-box;
-      padding:0 12px; 
+      padding:0 12px; /* 画像がエッジに張り付かないように内側余白 */
     }
 
     .slide img{
-      display:block;
-      margin:0 auto;
-      max-width:100%;
-      max-height:100%;
-      width:auto;
-      height:auto;
-      object-fit:contain;
-      border-radius:6px;
-      box-shadow:0 6px 20px rgba(0,0,0,0.06);
-      background:#fff;
-    }
+  max-height:calc(100% - 40px); /* 矢印 + ドットを避ける */
+  object-fit:contain;
+}
 
     /* UI（矢印/ドット）をラッパー上に固定 */
     .slidenav{
