@@ -65,55 +65,61 @@
     .hero h2{font-family:'Hachi Maru Pop',cursive;color:var(--accent);margin:6px 0 12px;font-size:40px}
     .hero p{color:var(--muted);margin:0 0 18px}
 
+    /*
+      重要な構造：
+      - .slideshow はラッパー（UIを固定する）
+      - .slides (内側) がスクロール可能（scroll-snap をここに設定）
+    */
     .slideshow{
       position:relative;
       border-radius:12px;
-      overflow:hidden; 
+      overflow:visible; /* ラッパー自体は visible にして UI 要素を固定できるようにする */
       background:#f9f7fb;
       width:100%;
       max-width:100%;
       height:360px;
-      /* padding-bottom:56px; を削除してエリア全体を使えるように変更 */
+      padding:0;
     }
 
+    /* 内側のスクロール可能領域 */
     .slides{
       display:flex;
-      transition:transform .6s cubic-bezier(.22,.9,.2,1);
-      height: 100%;
-      will-change: transform;
+      gap:0;
+      height:100%;
+      width:100%;
+      overflow-x:auto;                /* ← ここだけスクロール */
+      overflow-y:hidden;
+      scroll-snap-type: x mandatory;  /* ← スナップはここに */
+      -webkit-overflow-scrolling: touch;
+      scroll-behavior: smooth;
     }
-    .slide{
-  min-width:100%;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  height:100%;
-  position:relative;
-  box-sizing:border-box;
-}
-    .slide img{
-  display:block;          
-  margin:0 auto;          
-  max-width:100%;
-  max-height:100%;
-  width:auto;
-  height:auto;
-  object-fit:contain;
-  border-radius:6px;
-  box-shadow:0 6px 20px rgba(0,0,0,0.06);
-  background:#fff;
-}
 
-    .slide-meta{
-      position:absolute;
-      left:16px;
-      bottom:16px;
-      background:rgba(0,0,0,0.45);
-      color:#fff;
-      padding:8px 12px;
-      border-radius:10px;
-      font-size:14px;
+    .slide{
+      flex:0 0 100%;                  /* 各スライドはラッパー幅いっぱい */
+      scroll-snap-align:center;
+      display:flex;
+      justify-content:center;
+      align-items:center;
+      height:100%;
+      position:relative;
+      box-sizing:border-box;
+      padding:0 12px; /* 画像がエッジに張り付かないように内側余白 */
     }
+
+    .slide img{
+      display:block;
+      margin:0 auto;
+      max-width:100%;
+      max-height:100%;
+      width:auto;
+      height:auto;
+      object-fit:contain;
+      border-radius:6px;
+      box-shadow:0 6px 20px rgba(0,0,0,0.06);
+      background:#fff;
+    }
+
+    /* UI（矢印/ドット）をラッパー上に固定 */
     .slidenav{
       position:absolute;
       top:50%;
@@ -122,8 +128,9 @@
       transform:translateY(-50%);
       display:flex;
       justify-content:space-between;
-      pointer-events:none;
+      pointer-events:none; /* 子のボタンだけが受け取る */
       padding:0 6px;
+      z-index:10;
     }
     .slidenav button{
       pointer-events:auto;
@@ -143,6 +150,7 @@
       justify-content:center;
       padding:0;margin:0;
       pointer-events:auto;
+      z-index:10;
     }
     .dot{width:10px;height:10px;border-radius:50%;background:rgba(0,0,0,0.18);border:none;cursor:pointer}
     .dot.active{background:var(--accent)}
@@ -189,6 +197,7 @@
     @media (max-width:980px){
       .hero{grid-template-columns:1fr;}
       .slideshow{height:280px;}
+      .slides{height:280px;}
       .portfolio-grid{grid-template-columns:repeat(2,1fr)}
       .thumb{width:120px;height:88px}
       .hero-right{max-width:100%}
@@ -198,11 +207,16 @@
       nav ul{gap:8px}
       .hero h2{font-size:30px}
       .slideshow{height:180px;}
+      .slides{height:180px;}
     }
 
     @media (prefers-reduced-motion: reduce){
-      .slides{transition:none}
+      .slides{scroll-behavior:auto}
     }
+
+    /* optional: スクロールバー見た目調整（邪魔なら非表示にする） */
+    .slides::-webkit-scrollbar{height:8px}
+    .slides::-webkit-scrollbar-thumb{background:rgba(0,0,0,0.08);border-radius:999px}
   </style>
 </head>
 <body>
@@ -223,13 +237,17 @@
         <h2 id="hero-heading">Hi! 佐野です</h2>
         <p>ポスターやイラストを中心に制作しています。ここに最近の作品をスライドショーで表示しています。</p>
 
+        <!-- slideshow wrapper（UIはここに固定される） -->
         <div class="slideshow card" id="slideshow" aria-roledescription="carousel">
-          <div class="slides" id="slides">
-            <figure class="slide"><img src="E7735BF7-A0F1-4845-BBEA-BCC3AF916165.jpeg" alt="header full view"></figure>
-            <figure class="slide"><img src="kame_kuro.png" alt="poster 1"></figure>
-            <figure class="slide"><img src="3B30E03E-020A-422B-8401-8A2102570DEC.png" alt="poster 2"></figure>
+
+          <!-- 内側のスクロール領域（ここだけ横スクロール） -->
+          <div class="slides" id="slides" tabindex="0" aria-live="polite">
+            <figure class="slide" role="group" aria-roledescription="slide" aria-label="スライド 1"><img src="E7735BF7-A0F1-4845-BBEA-BCC3AF916165.jpeg" alt="header full view"></figure>
+            <figure class="slide" role="group" aria-roledescription="slide" aria-label="スライド 2"><img src="kame_kuro.png" alt="poster 1"></figure>
+            <figure class="slide" role="group" aria-roledescription="slide" aria-label="スライド 3"><img src="3B30E03E-020A-422B-8401-8A2102570DEC.png" alt="poster 2"></figure>
           </div>
 
+          <!-- 固定UI（ラッパー上に置く） -->
           <div class="slidenav" aria-hidden="true">
             <button id="prev" aria-label="前へ">◀</button>
             <button id="next" aria-label="次へ">▶</button>
@@ -310,8 +328,8 @@
         </article>
 
         <article class="item" data-category="icon">
-          <div class="thumb"><img loading="lazy" src="kame_kuro.png" alt="turtlePikoのロゴ"></div>
-          <div class="meta"><h5>turtlePikoロゴ</h5><p>@Jin_Neuron_DevのturtlePicoのロゴ</p></div>
+          <div class="thumb"><img loading="lazy" src="kame_kuro.png.png" alt="turtlePikoのロゴ"></div>
+          <div class="meta"><h5>turtlePikoロゴ</h5><p>@Jin_Neuron_DevのturtlePicoのロゴ/p></div>
         </article>
 
       </div>
@@ -343,45 +361,105 @@
   </div>
 
   <script>
-    // Simple slideshow
+    // === Slideshow (Scroll-snap) ===
     (function(){
-      const slidesEl = document.getElementById('slides');
+      const wrapper = document.getElementById('slideshow'); 
+      const slidesEl = document.getElementById('slides');   
       const slides = Array.from(slidesEl.children);
       const dotsEl = document.getElementById('dots');
-      const prev = document.getElementById('prev');
-      const next = document.getElementById('next');
+      const prevBtn = document.getElementById('prev');
+      const nextBtn = document.getElementById('next');
+
       let idx = 0;
       let timer = null;
+      const AUTOPLAY_INTERVAL = 4500;
 
+      // build dots
       function buildDots(){
         slides.forEach((s,i)=>{
           const d = document.createElement('button');
-          d.className='dot';
-          d.addEventListener('click',()=>go(i));
+          d.className = 'dot';
+          d.setAttribute('aria-label', `スライド ${i+1}`);
+          d.addEventListener('click', ()=> { go(i); });
           dotsEl.appendChild(d);
         });
       }
-      function update(){
-        slidesEl.style.transform = `translateX(-${idx*100}%)`;
-        Array.from(dotsEl.children).forEach((d,i)=>d.classList.toggle('active', i===idx));
-      }
-      function go(i){ idx = (i+slides.length)%slides.length; update(); resetTimer(); }
-      function prevFn(){ go(idx-1); }
-      function nextFn(){ go(idx+1); }
-      function resetTimer(){ if(timer) clearInterval(timer); timer = setInterval(()=>{ idx=(idx+1)%slides.length; update(); }, 4500); }
 
-      buildDots(); update();
-      prev.addEventListener('click',prevFn);
-      next.addEventListener('click',nextFn);
+      // update active dot
+      function updateDots(){
+        Array.from(dotsEl.children).forEach((d,i)=> d.classList.toggle('active', i === idx));
+      }
+
+      // scroll to slide i
+      function go(i){
+        idx = (i + slides.length) % slides.length;
+        slidesEl.scrollTo({
+          left: idx * slidesEl.clientWidth,
+          behavior: 'smooth'
+        });
+        updateDots();
+        resetTimer();
+      }
+
+      function next(){ go(idx + 1); }
+      function prev(){ go(idx - 1); }
+
+      // determine index on scroll (round to nearest)
+      let scrollTimeout = null;
+      function onScroll(){
+        if(scrollTimeout) clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(()=>{
+          const newIdx = Math.round(slidesEl.scrollLeft / slidesEl.clientWidth);
+          if(newIdx !== idx){
+            idx = newIdx;
+            updateDots();
+            resetTimer();
+          }
+        }, 80);
+      }
+
+      function resetTimer(){
+        if(timer) clearInterval(timer);
+        timer = setInterval(()=> { idx = (idx+1) % slides.length; slidesEl.scrollTo({left: idx * slidesEl.clientWidth, behavior:'smooth'}); updateDots(); }, AUTOPLAY_INTERVAL);
+      }
+
+      // events
+      buildDots();
+      updateDots();
+
+      prevBtn.addEventListener('click', prev);
+      nextBtn.addEventListener('click', next);
+      slidesEl.addEventListener('scroll', onScroll, { passive: true });
+
+      // pause autoplay when user interacts
+      function pauseAutoplay(){ if(timer) clearInterval(timer); timer = null; }
+      function resumeAutoplay(){ if(!timer) resetTimer(); }
+
+      slidesEl.addEventListener('mouseenter', pauseAutoplay);
+      slidesEl.addEventListener('mouseleave', resumeAutoplay);
+      slidesEl.addEventListener('focusin', pauseAutoplay);
+      slidesEl.addEventListener('focusout', resumeAutoplay);
+
+      // keyboard support (left/right)
+      slidesEl.addEventListener('keydown', (e)=>{
+        if(e.key === 'ArrowLeft'){ prev(); e.preventDefault(); }
+        if(e.key === 'ArrowRight'){ next(); e.preventDefault(); }
+      });
+
+      // start autoplay
       resetTimer();
 
-      // pause on hover
-      const slideshow = document.getElementById('slideshow');
-      slideshow.addEventListener('mouseenter',()=>{ if(timer) clearInterval(timer); });
-      slideshow.addEventListener('mouseleave',resetTimer);
+      // adjust scroll position on resize so index aligns with new width
+      let resizeTimer = null;
+      window.addEventListener('resize', ()=>{
+        if(resizeTimer) clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(()=>{
+          slidesEl.scrollTo({ left: idx * slidesEl.clientWidth, behavior: 'auto' });
+        }, 120);
+      });
     })();
 
-    // Gallery & lightbox
+    // Gallery & lightbox 
     (function(){
       const gallery = document.getElementById('gallery');
       const items = Array.from(gallery.querySelectorAll('.item'));
