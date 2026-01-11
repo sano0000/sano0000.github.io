@@ -73,13 +73,14 @@
       width:100%;
       max-width:100%;
       height:360px;
-      padding-bottom:56px;
+      /* padding-bottom:56px; を削除してエリア全体を使えるように変更 */
     }
 
     .slides{
       display:flex;
       transition:transform .6s cubic-bezier(.22,.9,.2,1);
-      height: calc(100% - 56px);
+      /* height: calc(100% - 56px); を 100% に変更 */
+      height: 100%;
       will-change: transform;
     }
     .slide{
@@ -101,7 +102,7 @@
       border-radius:6px;
       box-shadow:0 6px 20px rgba(0,0,0,0.06);
       background:#fff;
-      margin:0 auto;
+      margin:auto; /* 中央揃えを確実にするため auto に変更 */
     }
 
     .slide-meta{
@@ -218,7 +219,6 @@
   </header>
 
   <main class="container">
-    <!-- HERO with slideshow -->
     <section class="hero" aria-labelledby="hero-heading">
       <div class="hero-left">
         <h2 id="hero-heading">Hi! 佐野です</h2>
@@ -253,13 +253,11 @@
       </aside>
     </section>
 
-    <!-- ABOUT -->
     <section style="margin-top:36px;">
       <h2 class="section-title" id="ab">ABOUT</h2>
       <p>初めまして！佐野です。制作物など随時更新中。</p>
     </section>
 
-    <!-- PORTFOLIO -->
     <section style="margin-top:18px;">
       <h2 class="section-title" id="po">PORTFOLIO</h2>
       <p>イラストやポスターのギャラリー。クリックで拡大できます。</p>
@@ -304,7 +302,7 @@
 
         <article class="item" data-category="icon">
           <div class="thumb"><img loading="lazy" src="7586ECBA-0574-4C28-97ED-F2773C5B384C.png" alt="jinの秘書bot"></div>
-          <div class="meta"><h5>秘書bot アイコン</h5><p>jinの秘書botのアイコン</p></div>
+          <div class="meta"><h5>秘書bot アイコン</h5><p>DiscordのBOt,jinの秘書botのアイコン</p></div>
         </article>
 
         <article class="item" data-category="other">
@@ -315,7 +313,6 @@
       </div>
     </section>
 
-    <!-- LINKS -->
     <section style="margin-top:28px;">
       <h2 class="section-title" id="LI">LINKS</h2>
       <p>連絡はX(Twitter)のDMまでお願いします。</p>
@@ -333,7 +330,6 @@
 
   </main>
 
-  <!-- LIGHTBOX -->
   <div id="lightbox" class="lightbox" role="dialog" aria-hidden="true">
     <button class="lb-close" id="lbClose" aria-label="閉じる">✕</button>
     <div>
